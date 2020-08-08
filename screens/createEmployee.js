@@ -21,7 +21,14 @@ export const CreateEmployee = () => {
                 aspect: [1, 1],
                 quality: 0.5
             });
-            console.log(data);
+            if (!data.cancelled) {
+                let newFile = {
+                    uri: data.uri,
+                    type: `profile/${data.uri.split(".")[1]}`,
+                    name: `profile.${data.uri.split(".")[1]}`
+                }
+                handlerUpload(newFile);
+            }
         } else {
             Alert.alert("Need Permission to upload Image");
         }
@@ -36,10 +43,38 @@ export const CreateEmployee = () => {
                 aspect: [1, 1],
                 quality: 0.5
             });
-            console.log(data);
+            if (!data.cancelled) {
+                let newFile = {
+                    uri: data.uri,
+                    type: `profile/${data.uri.split(".")[1]}`,
+                    name: `profile.${data.uri.split(".")[1]}`
+                }
+                handlerUpload(newFile);
+            }
         } else {
             Alert.alert("Need Permission to take Image");
         }
+    }
+
+    const handlerUpload = (image) => {
+        const data = new FormData();
+        data.append('file', image);
+        data.append('upload_preset', 'employeeApp');
+        data.append('cloud_name', 'ashumantoo');
+
+        fetch("https://api.cloudinary.com/v1_1/ashumantoo/image/upload",
+            {
+                method: "post",
+                body: data
+            }).then(res => res.json())
+            .then(data => {
+                setPicture(data.url);
+                setModal(false);
+            }).catch(error => {
+                if (error) {
+                    throw new Error("Error While uploading image");
+                }
+            });
     }
 
     return (
@@ -78,7 +113,7 @@ export const CreateEmployee = () => {
                 onChangeText={salary => setSalary(salary)}
             />
             <Button
-                icon="upload"
+                icon={picture === "" ? "upload" : "check-bold"}
                 mode="contained"
                 theme={theme}
                 style={{ margin: 8 }}
