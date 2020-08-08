@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, FlatList } from 'react-native';
 import { Card, FAB } from 'react-native-paper';
 
-export const Home = () => {
+export const Home = (props) => {
 
     const employeeDataList = [
         { id: 1, name: "Ashutosh", position: "Fullstack Developer", imageUri: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80" },
@@ -19,14 +19,14 @@ export const Home = () => {
 
     const renderEmployeeView = ((item) => {
         return (
-            <Card style={styles.homeCard}>
+            <Card style={styles.homeCard} onPress={()=>props.navigation.navigate("Profile")}>
                 <View style={styles.cardview}>
                     <Image
                         style={styles.homeImage}
                         source={{ uri: item.imageUri }}
                     />
                     <View style={styles.textview}>
-                        <Text style={styles.homeCardText}>Hello From {item.name}</Text>
+                        <Text style={styles.homeCardText}>{item.name}</Text>
                         <Text style={{ marginLeft: 8 }}>{item.position}</Text>
                     </View>
                 </View>
@@ -48,7 +48,7 @@ export const Home = () => {
                 small={false}
                 icon="plus"
                 theme={{ colors: { accent: "#00aaff" } }}
-                onPress={() => console.log('Pressed')}
+                onPress={() => props.navigation.navigate('Create')}
             />
         </View>
     )
