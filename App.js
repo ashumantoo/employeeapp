@@ -12,11 +12,31 @@ import { Profile } from './screens/Profile';
 const Stack = createStackNavigator();
 
 function App() {
+  //changing Navigations header options
+  const headerOptions = {
+    title: "Dashboard",
+    headerTintColor: "white",
+    headerStyle: {
+      backgroundColor: "#00aaff"
+    }
+  }
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="Create" component={CreateEmployee} />
-      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        options={{ ...headerOptions, title: "Dashboard" }}
+      />
+      <Stack.Screen
+        name="Create"
+        component={CreateEmployee}
+        options={{ ...headerOptions, title: "Create Employee" }}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
+        options={{ ...headerOptions, title: "Employee Profile" }}
+      />
     </Stack.Navigator>
   );
 }

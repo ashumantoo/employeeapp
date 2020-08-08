@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Modal } from 'react-native';
+import { StyleSheet, Text, View, Modal, Alert } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
-
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
 
 export const CreateEmployee = () => {
     const [name, setName] = useState("");
@@ -10,6 +11,36 @@ export const CreateEmployee = () => {
     const [salary, setSalary] = useState("");
     const [picture, setPicture] = useState("");
     const [modal, setModal] = useState(false);
+
+    const pickFromGallery = async () => {
+        const { granted } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        if (granted) {
+            let data = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [1, 1],
+                quality: 0.5
+            });
+            console.log(data);
+        } else {
+            Alert.alert("Need Permission to upload Image");
+        }
+    }
+
+    const pickFromCamera = async () => {
+        const { granted } = await Permissions.askAsync(Permissions.CAMERA);
+        if (granted) {
+            let data = await ImagePicker.launchCameraAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [1, 1],
+                quality: 0.5
+            });
+            console.log(data);
+        } else {
+            Alert.alert("Need Permission to take Image");
+        }
+    }
 
     return (
         <View style={styles.createEmpRoot}>
@@ -50,7 +81,7 @@ export const CreateEmployee = () => {
                 icon="upload"
                 mode="contained"
                 theme={theme}
-                style={{margin:8}}
+                style={{ margin: 8 }}
                 onPress={() => setModal(true)}>
                 Upload Photo
             </Button>
@@ -76,14 +107,14 @@ export const CreateEmployee = () => {
                             icon="camera"
                             theme={theme}
                             mode="contained"
-                            onPress={() => setModal(false)}>
+                            onPress={() => pickFromCamera()}>
                             Camera
                         </Button>
                         <Button
                             icon="image-area"
                             theme={theme}
                             mode="contained"
-                            onPress={() => setModal(false)}>
+                            onPress={() => pickFromGallery()}>
                             Gallary
                         </Button>
                     </View>
@@ -122,8 +153,8 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
         padding: 10,
     },
-    saveButton:{
-        marginTop:10,
-        margin:8
+    saveButton: {
+        marginTop: 10,
+        margin: 8
     }
 });

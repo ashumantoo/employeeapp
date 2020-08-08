@@ -4,7 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Title, Card, Button } from 'react-native-paper';
 import { MaterialIcons, Entypo, FontAwesome } from '@expo/vector-icons';
 
-export const Profile = () => {
+export const Profile = (props) => {
     const openDial = () => {
         if (Platform.OS === "android") {
             Linking.openURL("tel:909090909090");
