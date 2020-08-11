@@ -3,14 +3,35 @@ import { StyleSheet, Text, View, Modal, Alert } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
+import axios from 'axios';
 
-export const CreateEmployee = () => {
+export const CreateEmployee = (props) => {
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
     const [salary, setSalary] = useState("");
     const [picture, setPicture] = useState("");
+    const [position, setPosition] = useState("");
     const [modal, setModal] = useState(false);
+
+    const createEmployee = () => {
+        const createEmpData = {
+            name,
+            phone,
+            email,
+            salary,
+            position,
+            picture
+        }
+        axios.post("http://10.0.2.2:3000/employees", createEmpData)
+            .then(response => {
+                console.log(response.data);
+                props.navigation.navigate("home");
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    };
 
     const pickFromGallery = async () => {
         const { granted } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -105,6 +126,14 @@ export const CreateEmployee = () => {
                 onChangeText={phone => setPhone(phone)}
             />
             <TextInput
+                label="Position"
+                style={styles.inputStyle}
+                theme={theme}
+                value={position}
+                mode="outlined"
+                onChangeText={position => setPosition(position)}
+            />
+            <TextInput
                 label="Salary"
                 style={styles.inputStyle}
                 theme={theme}
@@ -125,7 +154,7 @@ export const CreateEmployee = () => {
                 mode="contained"
                 theme={theme}
                 style={styles.saveButton}
-                onPress={() => console.log("saved")}>
+                onPress={createEmployee}>
                 Save
             </Button>
             <Modal

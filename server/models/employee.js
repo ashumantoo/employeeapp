@@ -16,7 +16,7 @@ const EmployeeSchema = new mongoose.Schema({
     position: {
         type: String
     },
-    salar: {
+    salary: {
         type: String
     }
 })
